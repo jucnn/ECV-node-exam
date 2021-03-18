@@ -62,6 +62,12 @@ Routes definition
                 }
             })
 
+            this.router.get('/logout', (req, res) => {
+                Controllers.auth.logout(req, res)
+                .then( apiResponse => sendApiSuccessResponse(req, res, apiResponse, 'Request succeed') )
+                .catch( apiError => sendApiErrorResponse(res, res, apiError, 'Request failed') );
+            })
+
 
             // [AUTH] get data from client cookie
             this.router.get('/me', this.passport.authenticate('jwt', { session: false }), (req, res) => {

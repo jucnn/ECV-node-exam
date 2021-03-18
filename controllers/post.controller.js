@@ -17,16 +17,13 @@ CRUD methods
  
     const readAll = () => {
         return new Promise( (resolve, reject) => {
+            // Mongoose population to get associated data
             Models.post.find()
-            .then( async data => {
-                let collection = [];
-                for( let item of data ){
-                    collection.push( await readOne(item._id) )
-                }
-                // Return populated data
-                return resolve(collection);
+            .populate('author', [ '-password' ])
+            .exec( (err, data) => {
+                if( err ){ return reject(err) }
+                else{ return resolve(data) }
             })
-            .catch( err => reject(err) )
         })
     }
 
@@ -35,8 +32,6 @@ CRUD methods
             // Mongoose population to get associated data
             Models.post.findById( id )
             .populate('author', [ '-password' ])
-            .populate('comment')
-            // TODO: populate post comment
             .exec( (err, data) => {
                 if( err ){ return reject(err) }
                 else{ return resolve(data) }

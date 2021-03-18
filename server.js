@@ -48,7 +48,7 @@ class ServerClass{
         this.server.use( express.static(path.join(__dirname, 'www')) );
 
         //=> Set body request with ExpressJS: BodyParser not needed (http://expressjs.com/fr/api.html#express.json)
-        this.server.use(express.json());
+        this.server.use(express.json({limit: '20mb'}));
         this.server.use(express.urlencoded({ extended: true }))
 
         //=> Set CookieParser to setup serverside cookies

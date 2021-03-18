@@ -45,6 +45,15 @@ Controller methods
             })
         })
     }
+
+    const logout = (req, res) => {
+        return new Promise( (resolve, reject) => {
+            // Set response cookie
+            res.cookie.set( process.env.COOKIE_NAME, userJwt, { expires: Date.now() } )
+
+            return resolve(true)
+        })
+    }
 //
 
 /* 
@@ -52,6 +61,7 @@ Export controller methods
 */
     module.exports = {
         register,
-        login
+        login,
+        logout
     }
 //
