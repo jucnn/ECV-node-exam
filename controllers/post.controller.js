@@ -1,77 +1,95 @@
 /* 
 Imports
 */
-    const Models = require('../models/index');
+const Models = require("../models/index");
 //
 
 /*  
 CRUD methods
 */
-    const createOne = req => {
-        return new Promise( (resolve, reject) => {
-            Models.post.create( req.body )
-            .then( data => resolve(data) )
-            .catch( err => reject(err) )
-        })
-    }
- 
-    const readAll = () => {
-        return new Promise( (resolve, reject) => {
-            // Mongoose population to get associated data
-            Models.post.find()
-            .populate('author', [ '-password' ])
-            .exec( (err, data) => {
-                if( err ){ return reject(err) }
-                else{ return resolve(data) }
-            })
-        })
-    }
+const createOne = (req) => {
+  return new Promise((resolve, reject) => {
+    Models.post
+      .create(req.body)
+      .then((data) => resolve(data))
+      .catch((err) => reject(err));
+  });
+};
 
-    const readOne = id => {
-        return new Promise( (resolve, reject) => {
-            // Mongoose population to get associated data
-            Models.post.findById( id )
-            .populate('author', [ '-password' ])
-            .exec( (err, data) => {
-                if( err ){ return reject(err) }
-                else{ return resolve(data) }
-            })
-        })
-    }
+const readAll = () => {
+  return new Promise((resolve, reject) => {
+    // Mongoose population to get associated data
+    Models.post
+      .find()
+      .populate("author", ["-password"])
+      .populate("comments", ["-post"])
+      .populate("likes", ["_id", "author"])
+      .exec((err, data) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(data);
+        }
+      });
+  });
+};
 
-    const updateOne = req => {
-        return new Promise( (resolve, reject) => {
-            // Get post by ID
-            Models.post.findById( req.params.id )
-            .then( post => {
-                // Update object
-                post.headline = req.body.headline;
-                post.body = req.body.body;
-                post.dateModified = new Date();
+const readOne = (id) => {
+  return new Promise((resolve, reject) => {
+    // Mongoose population to get associated data
+    Models.post
+      .findById(id)
+      .populate("author", ["-password"])
+      .populate("comments", ["-post"])
+      .populate("likes", ["_id", "author"])
+      .exec((err, data) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(data);
+        }
+      });
+  });
+};
 
-                // TODO: Check author
-                /* if( post.author !== req.user._id ){ return reject('User not authorized') }
-                else{ } */
+const updateOne = (req) => {
+  return new Promise((resolve, reject) => {
+    // Get post by ID
+    Models.post
+      .findById(req.params.id)
+      .then((post) => {
+        if (post.author !== req.user._id) {
+          return reject("User not authorized");
+        } else {
+          // Update object
+          post.headline = req.body.headline;
+          post.body = req.body.body;
+          post.dateModified = new Date();
 
-                // Save post changes
-                post.save()
-                .then( updatedPost => resolve(updatedPost) )
-                .catch( updateError => reject(updateError) )
-            })
-            .catch( err => reject(err) )
-        })
-    }
+          // Save post changes
+          post
+            .save()
+            .then((updatedPost) => resolve(updatedPost))
+            .catch((updateError) => reject(updateError));
+        }
+      })
+      .catch((err) => reject(err));
+  });
+};
 
-    const deleteOne = req => {
-        return new Promise( (resolve, reject) => {
-             // Delete object
-             Models.post.findByIdAndDelete( req.params.id, (err, deleted) => {
-                if( err ){ return reject(err) }
-                else{ return resolve(deleted) };
-            })
-            
-            // Get post by ID
-            /* Models.post.findById( req.params.id )
+const deleteOne = (req) => {
+  return new Promise((resolve, reject) => {
+    // Delete object
+    Models.post.findByIdAndDelete(req.params.id, (err, deleted) => {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(deleted);
+      }
+    });
+
+    // Get post by ID
+    /* Models.post.findById( req.params.id )
             .then( post => {
                 // TODO: Check author
                 if( post.author !== req.user._id ){ return reject('User not authorized') }
@@ -84,18 +102,18 @@ CRUD methods
                 }
             })
             .catch( err => reject(err) ); */
-        });
-    }
+  });
+};
 //
 
 /* 
 Export controller methods
 */
-    module.exports = {
-        readAll,
-        readOne,
-        createOne,
-        updateOne,
-        deleteOne
-    }
+module.exports = {
+  readAll,
+  readOne,
+  createOne,
+  updateOne,
+  deleteOne,
+};
 //

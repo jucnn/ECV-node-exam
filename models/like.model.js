@@ -11,10 +11,7 @@ Definition
 const MySchema = new Schema({
   // Schema.org
   "@context": { type: String, default: "http://schema.org" },
-  "@type": { type: String, default: "Article" },
-
-  headline: String,
-  body: String,
+  "@type": { type: String, default: "LikeAction" },
 
   // Associer le profil utilisateur
   author: {
@@ -22,29 +19,28 @@ const MySchema = new Schema({
     ref: "user",
   },
 
-  comments: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "comment",
-    },
-  ],
+  // Associer le commentaire
+  comment: {
+    type: Schema.Types.ObjectId,
+    ref: "comment",
+    default: null,
+  },
 
-  likes: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "like",
-    },
-  ],
+  // Associer le post
+  post: {
+    type: Schema.Types.ObjectId,
+    ref: "post",
+    default: null,
+  },
 
   // Définir une valeur par défaut
   creationDate: { type: Date, default: new Date() },
   dateModified: { type: Date, default: new Date() },
-  isPublished: { type: Boolean, default: false },
 });
 //
 
 /* 
 Export
 */
-module.exports = mongoose.model("post", MySchema);
+module.exports = mongoose.model("like", MySchema);
 //
