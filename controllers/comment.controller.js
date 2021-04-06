@@ -12,27 +12,25 @@ const createOne = (req) => {
     Models.comment
       .create(req.body)
       .then((data) => {
-          Models.post
-          .findById(data.post)
-          .then((post) => {
-              // Update object
-                post.comments.push(data)
-                // Save post changes
-                post
-                .save()
-                .then((updatedPost) => resolve(updatedPost))
-                .catch((updateError) => reject(updateError));
-          })
-          Models.user
+        Models.post.findById(data.post).then((post) => {
+          // Update post
+          post.comments.push(data);
+          // Save post changes
+          post
+            .save()
+            .then((updatedPost) => resolve(updatedPost))
+            .catch((updateError) => reject(updateError));
+        });
+        Models.user
           .findById(req.user._id)
           .then((user) => {
-              // Update object
-                user.comments.push(data)
-                // Save user changes
-                user
-                .save()
-                .then((updatedUser) => resolve(updatedUser))
-                .catch((updateError) => reject(updateError));
+            // Update user
+            user.comments.push(data);
+            // Save user changes
+            user
+              .save()
+              .then((updatedUser) => resolve(updatedUser))
+              .catch((updateError) => reject(updateError));
           })
           .catch((err) => reject(err));
         resolve(data);
@@ -46,9 +44,26 @@ const readAll = () => {
     // Mongoose population to get associated data
     Models.comment
       .find()
-      .populate("author", ["-password"])
-      .populate("post")
-      .populate("like")
+      .populate("author", ["-password", "-likes", "-comments"])
+      /*  .populate("post") */
+      /*  .populate("like") */
+      .exec((err, data) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(data);
+        }
+      });
+  });
+};
+
+const readAllByPost = (postId) => {
+  return new Promise((resolve, reject) => {
+    // Mongoose population to get associated data
+    Models.comment
+      .find({ post: postId })
+      .populate("comment", ["content", "author"])
+      .populate("author", ["-password", "-likes", "-comments"])
       .exec((err, data) => {
         if (err) {
           return reject(err);
@@ -131,6 +146,7 @@ module.exports = {
   readOne,
   createOne,
   updateOne,
+  readAllByPost,
   deleteOne,
 };
 //

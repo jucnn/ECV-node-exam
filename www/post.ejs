@@ -1,0 +1,39 @@
+<!-- Importer le header en EJS -->
+<%- include('statics/header') -%>
+
+<main>
+  <h1>Détail de l'article</h1>
+
+  <h4><%- data.data.post.headline %></h4>
+
+  <p><%- data.data.post.body %></p>
+
+  <hr />
+
+  <p>
+    <strong>Auteur :</strong> <%- data.data.post.author.givenName %> <%-
+    data.data.post.author.familyName %>
+  </p>
+
+  <p><strong>Nombres de likes :</strong> <%- data.data.post.likes.length %></p>
+
+  <hr />
+
+  <h4><strong>Commentaires du post :</strong></h4>
+
+  <ul>
+    <% for(let comment of data.data.comments) { %>
+    <li>
+      <%- comment.content %><br />
+      Par : <%- comment.author.givenName %> <%- comment.author.familyName %>
+    </li>
+    <% } %>
+  </ul>
+
+  <p><strong>Ajouter un commentaire</strong></p>
+
+  <%- include('components/form-comment') -%>
+</main>
+
+<!-- Importer le footer en EJS -->
+<%- include('statics/footer') -%>

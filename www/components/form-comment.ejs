@@ -1,0 +1,13 @@
+<!-- 
+    Créer un commentaire
+-->
+
+<form action="/comment" method="POST">
+    <input type="hidden" name="post" value="<%- data.data.post.id %>">
+
+    <label for="content">Contenu</label>
+    <textarea name="content" required minlength="2"></textarea>
+
+    <button type="submit">Ajouter</button>
+
+</form>

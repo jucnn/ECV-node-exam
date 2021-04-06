@@ -36,7 +36,7 @@ Controller methods
                         const userJwt = data.generateJwt(data);
                         
                         // Set response cookie
-                        res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 700000, httpOnly: true } )
+                        res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 999999999, httpOnly: true } )
 
                         // Send user data
                         return resolve(data)
