@@ -1,4 +1,4 @@
-Juliette CONNAN
+Juliette CONNAN - M2DEV
 
 # [03/2021] Boilerplate : NodeJS/ExpressJS API/backoffice
 
