@@ -84,7 +84,7 @@ class BackendRouter {
           .then((apiResponse) => {
             data.likesPerUser = apiResponse;
           })
-          .catch(() => (data.likesPerUser = null))
+          .catch(() => (data.likesPerUser = null));
         console.log(data);
 
         renderSuccessVue("post", req, res, data, "Request succeed", false);
@@ -243,105 +243,6 @@ class BackendRouter {
               .catch((apiError) =>
                 renderErrorVue("index", req, res, apiError, "Request failed")
               );
-          }
-        }
-      }
-    );
-
-    // [BACKOFFICE] get data from client to create object, protected by Passport MiddleWare
-    this.router.post(
-      "/:endpoint/:operation",
-      this.passport.authenticate("jwt", {
-        session: false,
-        failureRedirect: "/",
-      }),
-      (req, res) => {
-        // Check body data
-        if (
-          typeof req.body === "undefined" ||
-          req.body === null ||
-          Object.keys(req.body).length === 0
-        ) {
-          return renderErrorVue(
-            "index",
-            req,
-            res,
-            "No data provided",
-            "Request failed"
-          );
-        } else {
-          // Check body data
-          const { ok, extra, miss } = checkFields(
-            Mandatory[req.params.endpoint],
-            req.body
-          );
-
-          // Error: bad fields provided
-          if (!ok && req.params.operation != "delete") {
-            return renderErrorVue(
-              "index",
-              `/${req.params.endpoint}`,
-              req.params.operation,
-              res,
-              "Bad fields provided",
-              { extra, miss }
-            );
-          } else {
-            // Add author _id
-            req.body.author = req.user._id;
-
-            if (req.params.operation == "create") {
-              // Use the controller to create nex object
-              Controllers[req.params.endpoint]
-                .createOne(req)
-                .then((apiResponse) =>
-                  res.redirect(
-                    "/",
-                    req,
-                    res,
-                    "Request succeed",
-                    apiResponse,
-                    true
-                  )
-                )
-                .catch((apiError) =>
-                  renderErrorVue("error", req, res, apiError, "Request failed")
-                );
-            } else if (req.params.operation == "update") {
-              Controllers[req.params.endpoint]
-                .updateOne(req)
-                .then((apiResponse) =>
-                  res.redirect(
-                    "/",
-                    req,
-                    res,
-                    "Request succeed",
-                    apiResponse,
-                    true
-                  )
-                )
-                .catch((apiError) =>
-                  renderErrorVue("error", req, res, apiError, "Request failed")
-                );
-            } else if (req.params.operation == "delete") {
-              Controllers[req.params.endpoint]
-                .deleteOne(req)
-                .then((apiResponse) =>
-                  res.redirect(
-                    "/",
-                    req,
-                    res,
-                    "Request succeed",
-                    apiResponse,
-                    true
-                  )
-                )
-                .catch((apiError) =>
-                  renderErrorVue("error", req, res, apiError, "Request failed")
-                );
-            } else {
-              renderErrorVue("error", req, res, apiError, "Request unknown");
-            }
           }
         }
       }

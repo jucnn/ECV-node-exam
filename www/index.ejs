@@ -8,12 +8,16 @@
     <%- include('components/form-post') -%>
 
     <h3>Liste des articles</h3>
+    <div class="post-list_container">
         <% for(let item of data.data) { %>
-            <p>
-                <h4><%- item.headline %></h4>
-                <a href="/post/<%- item._id %>">Voir plus</a>
-            </p>
+            <div class="post-list_item">
+                <p>
+                    <h4><%- item.headline %></h4>
+                    <a href="/post/<%- item._id %>">Voir plus</a>
+                </p>
+            </div>
         <% } %>
+    </div>
 </main>
 
 <!-- Importer le footer en EJS -->

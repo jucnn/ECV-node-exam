@@ -2,43 +2,48 @@
 <%- include('statics/header') -%>
 
 <main>
-  <h1>Détail de l'article</h1>
 
-  <h4><%- data.data.post.headline %></h4>
+  <h3><%- data.data.post.headline %></h3>
 
   <p><%- data.data.post.body %></p>
 
   <hr />
 
-  <p>
-    <strong>Auteur :</strong> <%- data.data.post.author.givenName %> <%-
-    data.data.post.author.familyName %>
-  </p>
-  <% var postLike = data.data.likesPerUser.filter(like => like.post != null) %>
-  <% var isPostLiked = postLike.some(like => like.post.toString() ==
-  data.data.post._id.toString()) %> <% if(isPostLiked){ %> <% var likeId =
-  postLike.filter(like => like.post.toString() == data.data.post._id.toString())
-  %>
+  <div class="post-infos">
+    <div>
+      <p>
+        <strong>Auteur :</strong> <%- data.data.post.author.givenName %> <%-
+        data.data.post.author.familyName %>
+      </br><strong>Nombres de likes :</strong> <%- data.data.post.likes.length %></p>
+    </div>
 
-  <button
-    onclick="like('post', 'delete', '<%- data.data.post.id %>', '<%- likeId[0]._id %>')"
-  >
-    <span>Retirer des favoris ♥</span>
-  </button>
-
-  <% } else{%>
-
-  <button onclick="like('post', 'create', '<%- data.data.post.id %>')">
-    <span>Ajouter aux favoris ♡</span>
-  </button>
-  <% } %>
-
-  <p><strong>Nombres de likes :</strong> <%- data.data.post.likes.length %></p>
+    <div>
+      <% var postLike = data.data.likesPerUser.filter(like => like.post != null) %>
+      <% var isPostLiked = postLike.some(like => like.post.toString() ==
+      data.data.post._id.toString()) %> <% if(isPostLiked){ %> <% var postLikeId =
+      postLike.filter(like => like.post.toString() == data.data.post._id.toString())
+      %>
+      <button
+        onclick="like('post', 'delete', '<%- data.data.post.id %>', '<%- postLikeId[0]._id %>')"
+      >
+        <span>Retirer des favoris ♥</span>
+      </button>
+      <% } else{%>
+      <button onclick="like('post', 'create', '<%- data.data.post.id %>')">
+        <span>Ajouter aux favoris ♡</span>
+      </button>
+      <% } %>
+    
+    </div>
+  </div>
 
   <hr />
 
-    <h4><strong>Commentaires du post :</strong></h4>
-  
+    <h4><strong>Commentaires :</strong></h4>
+    <% if(data.data.comments.length == 0){ %>
+      <p>Pas de commentaires</p>
+    <% } %>
+
     <% for(let comment of data.data.comments) { %>
     <div class="comment_container">
       <div class="comment_item">
@@ -46,16 +51,34 @@
             Par : <%- comment.author.givenName %> <%- comment.author.familyName %>
           </p>
       </div>
+        <div class="comment_like">
+          <% var commentLike = data.data.likesPerUser.filter(like => like.comment != null) %>
+          <% var isCommentLiked = commentLike.some(like => like.comment.toString() ==
+          comment._id.toString()) %> <% if(isCommentLiked){ %> <% var commentLikeId =
+          commentLike.filter(like => like.comment.toString() == comment._id.toString())
+          %>
+          <button
+            onclick="like('comment', 'delete', '<%- comment._id %>', '<%- commentLikeId[0]._id %>')"
+          >
+            <span>Retirer des favoris ♥</span>
+          </button>
+          <% } else{%>
+          <button onclick="like('comment', 'create', '<%- comment._id %>')">
+            <span>Ajouter aux favoris ♡</span>
+          </button>
+          <% } %>
+        </div>
         <div class="comment_delete">
           <button onclick="deleteComment('<%- comment._id %>')">Supprimer le commentaire</button>
         </div>
     </div>
       <% } %>
 
-
-  <p><strong>Ajouter un commentaire</strong></p>
-
-  <%- include('components/form-comment') -%>
+    <div class="comment_add">
+      <p><strong>Ajouter un commentaire</strong></p>
+    
+      <%- include('components/form-comment') -%>
+    </div>
 </main>
 
 <!-- Importer le footer en EJS -->

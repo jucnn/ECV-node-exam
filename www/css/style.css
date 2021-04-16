@@ -2,12 +2,17 @@
 Reset
 */
 :root {
-  --main-color: red;
+  --main-color: #1395bb;
+  --main-light: #e9faff;
 }
 
 input,
 button {
   margin-bottom: 0;
+}
+
+hr {
+  border-color: var(--main-color);
 }
 
 h1 {
@@ -17,6 +22,11 @@ h1 {
   line-height: 1;
   margin-bottom: 0;
   width: 100%;
+}
+
+h2,
+h3 {
+  font-weight: bold;
 }
 
 a {
@@ -79,6 +89,11 @@ input:not([type]):focus,
 textarea:focus,
 select:focus {
   border-color: var(--main-color);
+}
+
+input[type="text"],
+textarea {
+  background-color: white;
 }
 
 label {
@@ -177,12 +192,39 @@ footer p {
 Post
 */
 
+.post-infos {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-list_item {
+  background-color: var(--main-light);
+
+  padding: 5px 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/**/
+
+/* 
+Comment
+*/
+
 .comment_container {
   display: flex;
 }
 
-.comment_delete {
-    margin-left: 20px;
+.comment_delete,
+.comment_like {
+  margin-left: 20px;
+}
+
+.comment_add {
+  margin-top: 40px;
+  background-color: var(--main-light);
+  padding: 15px;
+  border-radius: 10px;
 }
 
 /**/
