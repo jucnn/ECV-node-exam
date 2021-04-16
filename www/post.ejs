@@ -14,21 +14,44 @@
     <strong>Auteur :</strong> <%- data.data.post.author.givenName %> <%-
     data.data.post.author.familyName %>
   </p>
+  <% var postLike = data.data.likesPerUser.filter(like => like.post != null) %>
+  <% var isPostLiked = postLike.some(like => like.post.toString() ==
+  data.data.post._id.toString()) %> <% if(isPostLiked){ %> <% var likeId =
+  postLike.filter(like => like.post.toString() == data.data.post._id.toString())
+  %>
+
+  <button
+    onclick="like('post', 'delete', '<%- data.data.post.id %>', '<%- likeId[0]._id %>')"
+  >
+    <span>Retirer des favoris ♥</span>
+  </button>
+
+  <% } else{%>
+
+  <button onclick="like('post', 'create', '<%- data.data.post.id %>')">
+    <span>Ajouter aux favoris ♡</span>
+  </button>
+  <% } %>
 
   <p><strong>Nombres de likes :</strong> <%- data.data.post.likes.length %></p>
 
   <hr />
 
-  <h4><strong>Commentaires du post :</strong></h4>
-
-  <ul>
+    <h4><strong>Commentaires du post :</strong></h4>
+  
     <% for(let comment of data.data.comments) { %>
-    <li>
-      <%- comment.content %><br />
-      Par : <%- comment.author.givenName %> <%- comment.author.familyName %>
-    </li>
-    <% } %>
-  </ul>
+    <div class="comment_container">
+      <div class="comment_item">
+          <p><%- comment.content %></br>
+            Par : <%- comment.author.givenName %> <%- comment.author.familyName %>
+          </p>
+      </div>
+        <div class="comment_delete">
+          <button onclick="deleteComment('<%- comment._id %>')">Supprimer le commentaire</button>
+        </div>
+    </div>
+      <% } %>
+
 
   <p><strong>Ajouter un commentaire</strong></p>
 

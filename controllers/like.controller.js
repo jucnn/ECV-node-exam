@@ -62,7 +62,6 @@ const readAll = () => {
     // Mongoose population to get associated data
     Models.like
       .find()
-      .populate("like")
       .exec((err, data) => {
         if (err) {
           return reject(err);
@@ -135,6 +134,20 @@ const deleteOne = (req) => {
       .catch((err) => reject(err));
   });
 };
+
+const getLikePerUser = (userId) => {
+  return new Promise((resolve, reject) => {
+    Models.like
+      .find({ author: userId })
+      .exec((err, data) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(data);
+        }
+      });
+  });
+};
 //
 
 /* 
@@ -146,5 +159,6 @@ module.exports = {
   createOne,
   updateOne,
   deleteOne,
+  getLikePerUser
 };
 //

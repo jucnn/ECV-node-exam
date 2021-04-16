@@ -61,6 +61,7 @@ class BackendRouter {
         const data = {
           post: null,
           comments: null,
+          likesPerUser: null,
         };
         await Controllers["post"]
           .readOne(req.params.id)
@@ -78,16 +79,15 @@ class BackendRouter {
           })
           .catch(() => (data.comments = null));
 
+        await Controllers["like"]
+          .getLikePerUser(req.user._id)
+          .then((apiResponse) => {
+            data.likesPerUser = apiResponse;
+          })
+          .catch(() => (data.likesPerUser = null))
         console.log(data);
 
-        renderSuccessVue(
-          "post",
-          req,
-          res,
-          data,
-          "Request succeed",
-          false
-        );
+        renderSuccessVue("post", req, res, data, "Request succeed", false);
       }
     );
 

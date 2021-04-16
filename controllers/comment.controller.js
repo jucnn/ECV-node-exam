@@ -8,6 +8,7 @@ const Models = require("../models/index");
 CRUD methods
 */
 const createOne = (req) => {
+  console.log(req.user);
   return new Promise((resolve, reject) => {
     Models.comment
       .create(req.body)

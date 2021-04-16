@@ -23,14 +23,14 @@ const MySchema = new Schema({
   comment: {
     type: Schema.Types.ObjectId,
     ref: "comment",
-    default: null,
+    default: "",
   },
 
   // Associer le post
   post: {
     type: Schema.Types.ObjectId,
     ref: "post",
-    default: null,
+    default: "",
   },
 
   // Définir une valeur par défaut
