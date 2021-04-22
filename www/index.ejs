@@ -2,8 +2,9 @@
 <%- include('statics/header') -%>
 
 <main>
-    <h2>Page protégée</h2>
-
+    <div class="logout">
+        <button onclick="logout()">Se déconnecter</button>
+    </div>
     <h3>Ajouter un article</h3>
     <%- include('components/form-post') -%>
 

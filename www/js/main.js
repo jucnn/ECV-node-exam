@@ -1,4 +1,13 @@
-baseUrlApi = `${window.location.protocol}//${window.location.host}/api`;
+baseUrlApi = `${window.location.protocol}//${window.location.host}`;
+
+async function logout() {
+  await fetch(baseUrlApi + '/auth/logout')
+  .then((response) => (response.ok ? response.json() : response))
+  .catch((error) => console.log(error));
+
+  window.location.reload();
+
+}
 
 function like(type, operation, id, likeId) {
   let payload = {
@@ -25,7 +34,7 @@ function like(type, operation, id, likeId) {
       options = {
         method: "DELETE",
       };
-      urlApi = baseUrlApi + `/like/${likeId}`;
+      urlApi = baseUrlApi + `/api/like/${likeId}`;
       break;
     case "create":
       options = {
@@ -33,7 +42,7 @@ function like(type, operation, id, likeId) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       };
-      urlApi = baseUrlApi + `/like`;
+      urlApi = baseUrlApi + `/api/like`;
       break;
     default:
       return;

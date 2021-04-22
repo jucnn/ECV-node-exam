@@ -49,8 +49,7 @@ Controller methods
     const logout = (req, res) => {
         return new Promise( (resolve, reject) => {
             // Set response cookie
-            res.cookie.set( process.env.COOKIE_NAME, userJwt, { expires: Date.now() } )
-
+            res.clearCookie(process.env.COOKIE_NAME).send();        
             return resolve(true)
         })
     }
